@@ -266,6 +266,127 @@
       text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
     }
 
+    .memory-trigger {
+      cursor: pointer;
+    }
+
+    .memory-trigger:hover {
+      box-shadow:
+        0 18px 52px rgba(255, 182, 193, 0.22),
+        0 10px 28px rgba(255, 105, 180, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    .memory-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    .memory-modal.open {
+      display: flex;
+    }
+
+    .memory-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .memory-modal-content {
+      position: relative;
+      max-width: 720px;
+      width: 90%;
+      max-height: 80vh;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 24px;
+      padding: 30px 30px 24px;
+      box-shadow:
+        0 18px 60px rgba(0, 0, 0, 0.25),
+        0 8px 24px rgba(0, 0, 0, 0.18);
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+
+    .memory-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      border: none;
+      background: transparent;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: #b85b7a;
+      font-weight: 700;
+      padding: 4px 6px;
+    }
+
+    .memory-modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: #b85b7a;
+      margin-bottom: 10px;
+    }
+
+    .memory-modal-subtitle {
+      font-size: 0.95rem;
+      color: #c47191;
+      margin-bottom: 18px;
+    }
+
+    .memory-modal-text {
+      font-size: 1rem;
+      color: #6d4c57;
+      line-height: 1.8;
+      margin-bottom: 18px;
+      white-space: pre-line;
+    }
+
+    .memory-modal-image {
+      width: 100%;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+      object-fit: cover;
+    }
+
+    .memory-modal-film {
+      margin-top: 10px;
+      overflow: hidden;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+      background: rgba(255, 255, 255, 0.6);
+      padding: 10px 0;
+    }
+
+    .memory-film-track {
+      display: flex;
+      gap: 10px;
+      padding: 0 10px;
+      animation: filmScroll 26s linear infinite;
+    }
+
+    .memory-film-image {
+      height: 140px;
+      border-radius: 14px;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    @keyframes filmScroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
     .back-button {
       position: fixed;
       top: 30px;
@@ -374,62 +495,78 @@
     <div class="timeline">
       <div class="memory">
         <div class="memory-icon">💫</div>
-        <div class="memory-content">
-          <h3 class="memory-title">First Meeting</h3>
-          <p class="memory-date">The Beginning of Forever</p>
-          <p class="memory-text">The moment our eyes first met, I knew something magical was about to begin. That spark,
-            that connection - it was destiny bringing us together.</p>
+        <div class="memory-content memory-trigger" data-memory-id="1">
+          <h3 class="memory-title">2025年1月20日 · 一起去滑雪</h3>
+          <p class="memory-date">怀北雪场 · 咱俩的小白初体验</p>
+          <p class="memory-text">点开看看</p>
         </div>
       </div>
 
       <div class="memory">
         <div class="memory-icon">💝</div>
-        <div class="memory-content">
-          <h3 class="memory-title">First Date</h3>
-          <p class="memory-date">A Night to Remember</p>
-          <p class="memory-text">Nervous butterflies, endless conversations, and that perfect smile. Time stood still as
-            we discovered how perfectly our souls aligned.</p>
+        <div class="memory-content memory-trigger" data-memory-id="2">
+          <h3 class="memory-title">2025年3月23日 · 自驾去宝泉</h3>
+          <p class="memory-date">宝泉 · 我再也不去了，呜呜呜</p>
+          <p class="memory-text">点开看看</p>
         </div>
       </div>
 
       <div class="memory">
         <div class="memory-icon">🌟</div>
-        <div class="memory-content">
-          <h3 class="memory-title">First "I Love You"</h3>
-          <p class="memory-date">Three Words, Infinite Meaning</p>
-          <p class="memory-text">When those three words were spoken, my heart knew it had found its home. It was the
-            most beautiful moment of vulnerability and truth.</p>
+        <div class="memory-content memory-trigger" data-memory-id="3">
+          <h3 class="memory-title">2025年4月5日 · 踏青</h3>
+          <p class="memory-date">北京 · 俺们又来了</p>
+          <p class="memory-text">点开看看</p>
         </div>
       </div>
 
       <div class="memory">
         <div class="memory-icon">🎭</div>
-        <div class="memory-content">
-          <h3 class="memory-title">Adventures Together</h3>
-          <p class="memory-date">Making Memories</p>
-          <p class="memory-text">From spontaneous trips to quiet evenings, every adventure with you is perfect. You turn
-            ordinary moments into extraordinary memories.</p>
+        <div class="memory-content memory-trigger" data-memory-id="4">
+          <h3 class="memory-title">2025年5月1日 · 五一五一</h3>
+          <p class="memory-date">回家回家</p>
+          <p class="memory-text">点开看看</p>
         </div>
       </div>
 
       <div class="memory">
         <div class="memory-icon">🌈</div>
-        <div class="memory-content">
-          <h3 class="memory-title">Through Thick and Thin</h3>
-          <p class="memory-date">Growing Stronger Together</p>
-          <p class="memory-text">Every challenge we've faced has only made us stronger. Your support, love, and presence
-            have been my constant source of strength.</p>
+        <div class="memory-content memory-trigger" data-memory-id="5">
+          <h3 class="memory-title">2025年 · 一起在家的一天</h3>
+          <p class="memory-date">做饭、刷碗、抢沙发和被子</p>
+          <p class="memory-text">看起来最普通的一天，也值得被专门记在某一格里。</p>
         </div>
       </div>
 
       <div class="memory">
         <div class="memory-icon">💖</div>
-        <div class="memory-content">
-          <h3 class="memory-title">Today and Always</h3>
-          <p class="memory-date">Our Forever Continues</p>
-          <p class="memory-text">Every day with you is a new memory to cherish. I can't wait to create countless more
-            beautiful moments together. You are my forever.</p>
+        <div class="memory-content memory-trigger" data-memory-id="6">
+          <h3 class="memory-title">2025年10月1日 · 十一国庆假期</h3>
+          <p class="memory-date">苏杭 · 报复性见面</p>
+          <p class="memory-text">点开看看</p>
         </div>
+      </div>
+
+      <div class="memory">
+        <div class="memory-icon">✨</div>
+        <div class="memory-content memory-trigger" data-memory-id="7">
+          <h3 class="memory-title">2025年 · To be continued...</h3>
+          <p class="memory-date">把还没写下来的，都留给未来的我们</p>
+          <p class="memory-text">这一格先空着，等我们再创造一个值得被好好记录的瞬间，就把故事写在这里。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Memory Detail Modal -->
+  <div class="memory-modal" id="memory-modal">
+    <div class="memory-modal-backdrop"></div>
+    <div class="memory-modal-content">
+      <button class="memory-modal-close" aria-label="Close">×</button>
+      <h2 class="memory-modal-title" id="memory-modal-title"></h2>
+      <p class="memory-modal-text" id="memory-modal-text"></p>
+      <div class="memory-modal-film">
+        <div class="memory-film-track" id="memory-film-track"></div>
       </div>
     </div>
   </div>
@@ -463,6 +600,151 @@
     }
 
     setInterval(createSparkle, 800);
+
+    // Memory detail modal logic
+    const memoryModal = document.getElementById('memory-modal');
+    const memoryModalTitle = document.getElementById('memory-modal-title');
+    const memoryModalText = document.getElementById('memory-modal-text');
+    const memoryFilmTrack = document.getElementById('memory-film-track');
+    const memoryModalClose = memoryModal?.querySelector('.memory-modal-close');
+    const memoryModalBackdrop = memoryModal?.querySelector('.memory-modal-backdrop');
+
+    const memoryDetails = {
+      1: {
+        title: '2025年1月20日 · 一起去滑雪',
+        text: '研一放寒假，咱们俩一起去怀北滑雪，结果不巧那天停电，但我们谁都不想就这么回家，一直在雪场里等，终于等到重新来电。因为我们俩都是小白，我又特别担心你的安全，就给你安排了一个教练，想让你玩得开心又安心。那天虽然冷得要命，但和你在一起的一切都变得很温暖。',
+        images: [
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/01skiing/1.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/01skiing/2.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/01skiing/3.jpg'
+        ]
+      },
+      2: {
+        title: '2025年3月23日 · 自驾去宝泉',
+        text: '寒假刚开学，主打一个‘说走就走’。哪怕你单休，也要极限挑战河南宝泉一日游！ 周六晚突袭你宿舍制定战术，加上郑州的油孝文，经典的‘三人特种兵团’再次集结。 本以为是看山看水，结果变成了你的‘历险记’。 那个跨山大桥，下面是万丈深渊，你在桥头足足做了半小时心理建设才敢迈步。 最绝的是，过了桥发现后面全是悬空栈道！你直接心态崩了，闭着眼不敢动。 最后是我和孝文一左一右把你‘架’完全程的……蹦极是别想看了，被你催着逃下山，嘴里还念叨着‘再也不来了’。 真是又菜又爱玩，太难忘了',
+        images: [
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/02baoquan/1.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/02baoquan/2.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/02baoquan/4.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/02baoquan/5.jpg'
+        ]
+      },
+      3: {
+        title: '2025年4月5日 · 踏青',
+        text: '清明小长假，必须出门拥抱春天。 这次换你来北京找我，正好宇也想来逛逛，又是熟悉且热闹的三人行。 先去颐和园弥补了24年留下的遗憾，不仅逛了园子，还给你拍了好多满意的照片（摄影技术大涨！）。 接着又一起爬了长城，虽然累但很开心。 北京的春天很短，但有你在，这一刻很长。',
+        images: [
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/03beijing/1.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/03beijing/2.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/03beijing/3.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/03beijing/4.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/03beijing/5.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/03beijing/6.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/03beijing/7.jpg',
+        ]
+      },
+      4: {
+        title: '2025年5月1日 · 五一小长假',
+        text: '“终于盼来了五一小长假，回家！ 但万万没想到，这次假期的‘高光时刻’竟然是被你偷拍——而且还是在我尿尿的时候！ 真是服了你，连这种尴尬瞬间都不放过，你的相册里到底还有多少我的‘黑历史’？ 不过，抛开这个小插曲，五一真的很惬意。 和宁宁、璨璨一起钻进麦田里，吹着风，感受大自然最原始的气息。 还有在你公司操场散步的那个傍晚，没有特定的目的地，就这样慢悠悠地走着。 平淡又美好，那一刻我真的觉得，只要是和你待在一块，做什么都好。',
+        images: [
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/04home/1.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/04home/2.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/04home/3.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/04home/4.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/04home/5.jpg',
+        ]
+      },
+      5: {
+        title: '2025年6月 · 和你在一起',
+        text: '没错，我又又又回家了！ 这次给自己放个暑假，其实就是想找个理由，多赖在你身边待一会儿。 赶上你要换工作，正好陪你去拍最美的入职照，见证你的新开始。 夏天的快乐其实很简单：是在我们家院子里支起炉子搞烧烤，是拉着你一起拍毫无包袱的搞笑短视频。 烟火气里有肉香，镜头里有笑声。 这样的时光太美好，美好到我想把这个暑假无限拉长。',
+        images: [
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/05home/1.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/05home/2.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/05home/3.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/05home/4.jpg',
+        ]
+      },
+      6: {
+        title: '2025年10月1日 · 十一国庆假期',
+        text: '转眼到了十一，终于，终于见到你了。 整整4个月没有见面，这是我们从17年在一起到现在，分别最久的一次。 思念积压到了极限，见面必须是‘报复性’的狂玩。 我们去了一直心心念念的苏杭。 在西湖边吹风，在灵隐寺许愿，在上海滩看霓虹。 风景很美，人潮很拥挤，但我紧紧牵着你的手一刻也不想松开。 这一刻我才确定，熬过异地的苦，剩下的全都是甜。',
+        images: [
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/06hangzhou/1.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/06hangzhou/2.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/06hangzhou/3.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/06hangzhou/4.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/06hangzhou/5.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/06hangzhou/6.jpg',
+        ]
+      },
+      7: {
+        title: '2025年11月16日 · 思念不可待',
+        text: '进入11月，思念突然到了临界点。 不想再等了，买了机票直接飞北京，只为见你一面。 以前总是你辛苦奔赴北京来看我，这一次，换我跨越山海来找你。 也许是老天都被感动了，去的三天里，竟然幸运地撞上了北京的初雪。 我们牵手走在地坛，看红墙黛瓦落满白雪。 听着脚下咯吱咯吱的声音，看着身边的你，心里只有一个念头： 能和你一起淋雪，真好，仿佛一不小心就走到了白头。',
+        images: [
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/07beijing/1.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/07beijing/2.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/07beijing/3.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/07beijing/4.jpg',
+          'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/07beijing/5.jpg',
+        ]
+      }
+    };
+
+    function openMemoryModal() {
+      if (memoryModal) {
+        memoryModal.classList.add('open');
+      }
+    }
+
+    function closeMemoryModal() {
+      if (memoryModal) {
+        memoryModal.classList.remove('open');
+      }
+    }
+
+    function renderMemoryFilm(images) {
+      if (!memoryFilmTrack) return;
+      memoryFilmTrack.innerHTML = '';
+      if (!images || images.length === 0) return;
+      const loopImages = images.concat(images);
+      loopImages.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.className = 'memory-film-image';
+        img.alt = '';
+        memoryFilmTrack.appendChild(img);
+      });
+    }
+
+    document.querySelectorAll('.memory-trigger').forEach(function (el) {
+      el.addEventListener('click', function () {
+        const id = el.getAttribute('data-memory-id');
+        const detail = id ? memoryDetails[id] : null;
+        if (!detail) return;
+
+        if (memoryModalTitle) {
+          memoryModalTitle.textContent = detail.title || '';
+        }
+        if (memoryModalText) {
+          memoryModalText.textContent = detail.text || '';
+        }
+
+        renderMemoryFilm(detail.images || []);
+        openMemoryModal();
+      });
+    });
+
+    if (memoryModalClose) {
+      memoryModalClose.addEventListener('click', closeMemoryModal);
+    }
+
+    if (memoryModalBackdrop) {
+      memoryModalBackdrop.addEventListener('click', closeMemoryModal);
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeMemoryModal();
+      }
+    });
   </script>
 
 </body>

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="./fav.svg" type="image/x-icon">
+  <title>和你一起的未来 ✨</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: radial-gradient(circle at 0% 0%, rgba(255, 182, 193, 0.45), transparent 55%),
+                  radial-gradient(circle at 100% 100%, rgba(166, 193, 238, 0.5), transparent 55%),
+                  linear-gradient(135deg, #0b1020, #15152a 40%, #261a3b 70%, #321b43 100%);
+      color: #fdf5ff;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+      opacity: 0;
+      animation: twinkle 4s ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.3); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 780px;
+      width: 100%;
+      padding: 32px 20px 40px;
+    }
+
+    .envelope-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 3;
+      pointer-events: auto;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .envelope-card {
+      background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.55), transparent 65%),
+                  rgba(255, 252, 249, 0.92);
+      padding: 22px 26px 20px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+      max-width: 420px;
+      width: 82vw;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .envelope-icon {
+      width: 56px;
+      height: 40px;
+      margin: 0 auto 12px;
+      position: relative;
+    }
+
+    .envelope-icon::before,
+    .envelope-icon::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+    }
+
+    .envelope-icon::before {
+      background: linear-gradient(135deg, #ffcad4, #ffe6f2);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+    }
+
+    .envelope-icon::after {
+      background: conic-gradient(from 180deg, transparent 0 25%, rgba(255, 255, 255, 0.7) 25% 75%, transparent 75% 100%);
+      clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+      opacity: 0.9;
+    }
+
+    .envelope-title {
+      font-size: 1.1rem;
+      color: #c15170;
+      margin-bottom: 4px;
+    }
+
+    .envelope-to {
+      font-size: 0.95rem;
+      color: #a66b80;
+      margin-bottom: 10px;
+    }
+
+    .envelope-hint {
+      font-size: 0.9rem;
+      color: #8b5c6e;
+      opacity: 0.9;
+    }
+
+    .letter {
+      position: relative;
+      background: radial-gradient(circle at 0% 0%, rgba(255,255,255,0.35), transparent 55%),
+                  rgba(255, 252, 249, 0.9);
+      color: #5b3a44;
+      border-radius: 22px;
+      padding: 32px 28px 30px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .letter::before,
+    .letter::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      height: 10px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(0,0,0,0.18), transparent 70%);
+      opacity: 0.18;
+      z-index: -1;
+    }
+
+    .letter::before { bottom: -8px; }
+    .letter::after { bottom: -14px; filter: blur(3px); }
+
+    .letter-title {
+      font-family: "Dancing Script", "STKaiti", "KaiTi", cursive;
+      font-size: 2.3rem;
+      color: #c15170;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .letter-subtitle {
+      font-size: 1rem;
+      color: #b27a8b;
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .letter-body {
+      font-size: 1rem;
+      line-height: 1.9;
+      white-space: pre-wrap;
+    }
+
+    .letter-sign {
+      margin-top: 20px;
+      text-align: right;
+      font-size: 0.95rem;
+      color: #a3657a;
+    }
+
+    .reply-btn {
+      position: fixed;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 4;
+      padding: 10px 16px;
+      border-radius: 999px 0 0 999px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(8, 8, 20, 0.7);
+      color: #ffe6f9;
+      font-size: 0.9rem;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6);
+    }
+
+    .reply-btn:hover {
+      background: rgba(255, 182, 193, 0.25);
+    }
+
+    .reply-panel {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(4, 4, 15, 0.45);
+      z-index: 5;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .reply-card {
+      width: min(420px, 92vw);
+      background: rgba(255, 252, 249, 0.96);
+      border-radius: 20px;
+      padding: 20px 22px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
+      color: #5b3a44;
+    }
+
+    .reply-title {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      color: #c15170;
+    }
+
+    .reply-text {
+      width: 100%;
+      min-height: 130px;
+      resize: vertical;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(180, 150, 165, 0.6);
+      font-size: 0.9rem;
+      font-family: inherit;
+      line-height: 1.6;
+      outline: none;
+    }
+
+    .reply-text:focus {
+      border-color: #ff9ac4;
+      box-shadow: 0 0 0 1px rgba(255, 154, 196, 0.4);
+    }
+
+    .reply-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+
+    .reply-btn-secondary,
+    .reply-btn-primary {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .reply-btn-secondary {
+      background: transparent;
+      color: #a66b80;
+    }
+
+    .reply-btn-primary {
+      background: linear-gradient(135deg, #ff9ac4, #ffc6e0);
+      color: #5b0f2a;
+      box-shadow: 0 4px 10px rgba(255, 153, 196, 0.6);
+    }
+
+    .reply-tip {
+      font-size: 0.78rem;
+      color: #9a6a7e;
+      opacity: 0.9;
+    }
+
+    .reply-open .reply-panel {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* 背景音乐开关 */
+    #music-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 0, 0, 0.3);
+      border: 2px solid rgba(255, 0, 0, 0.5);
+      color: white;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    #music-toggle:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    #music-toggle:active {
+      transform: scale(0.9);
+    }
+
+    #music-toggle svg {
+      width: 24px;
+      height: 24px;
+      fill: red;
+      stroke: red;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .letter-open .letter {
+      opacity: 1;
+      transform: none;
+    }
+
+    .letter-open .envelope-overlay {
+      opacity: 0;
+      transform: translateY(-16px) scale(0.96);
+      pointer-events: none;
+    }
+
+    .back-link {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 4;
+      text-decoration: none;
+      color: #ffe6f9;
+      font-size: 0.95rem;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(8, 8, 20, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6);
+    }
+
+    .back-link:hover {
+      background: rgba(255, 182, 193, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 18px 16px 26px; }
+      .back-link { top: 12px; left: 12px; padding: 8px 14px; }
+      .letter { padding: 26px 18px 22px; }
+      .letter-title { font-size: 1.8rem; }
+      .letter-body { font-size: 0.95rem; }
+      .envelope-card { padding: 18px 18px 16px; }
+      .reply-btn { right: 10px; padding: 8px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="page2.htm" class="back-link">← 回到主页面</a>
+
+  <audio id="background-music" src="music/music.mp3" autoplay loop></audio>
+  <button id="music-toggle" title="Toggle Music">
+    <span id="icon-playing" style="display: none;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+      </svg>
+    </span>
+    <span id="icon-muted">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+    </span>
+  </button>
+
+  <button class="reply-btn" id="reply-btn">回信给阿彪</button>
+
+  <div class="stars" id="stars"></div>
+
+  <div class="container">
+    <div class="envelope-overlay" id="envelope">
+      <div class="envelope-card">
+        <div class="envelope-icon"></div>
+        <div class="envelope-title">有一封写给你的信</div>
+        <div class="envelope-to" id="envelope-to">写给未来的你</div>
+        <div class="envelope-hint">轻轻点一点，把这封信慢慢展开。</div>
+      </div>
+    </div>
+
+    <div class="reply-panel" id="reply-panel">
+      <div class="reply-card">
+        <div class="reply-title">写一封小小的回信</div>
+        <textarea class="reply-text" id="reply-text" placeholder="想对阿彪说什么，都可以写在这里…"></textarea>
+        <div class="reply-actions">
+          <button class="reply-btn-secondary" id="reply-cancel">先放在心里</button>
+          <button class="reply-btn-primary" id="reply-send">发送到阿彪邮箱</button>
+        </div>
+        <div class="reply-tip">点击“发送”后，我会帮你把这封回信转到阿彪的邮箱：wbzhuit@126.com。</div>
+      </div>
+    </div>
+
+    <div class="letter">
+      <h1 class="letter-title">和你一起的未来</h1>
+      <p class="letter-subtitle" id="subtitle-text">接下来的每一年，我都想认真和你一起走。</p>
+
+      <div class="letter-body" id="letter-body">
+淼妮，
+
+      关于以后，其实我没有什么伟大的计划。 make money！ 为你挣钱，为我挣钱，为咱俩得家庭挣钱。我不能保证未来让你过上大富大贵的生活，但是我可以保证的是，未来让你过上无忧无虑的生活。正如那张圣诞照片，展示的那样：10年后的圣诞节，你依旧漂亮，依旧爱笑。我依然给你拍照，只不过手里不再是用着手机，而是用着咱俩买的专业相机去拍下你最美的瞬间。
+      认识你已经12年有余了。初一，第一眼看到你的时候，哇，感觉你真的好漂亮，好高。后来慢慢了解你，发现你的性格我也很喜欢：善良，做事果断，自信，给人一种大姐大的感觉。每天中午都会找你问问题，即使没有什么问题，也得找个借口跑到你的座位上给你讲话。那个时候英语老师让我和你轮流在黑板上抄一些英语单词。其实我每天都知道抄的内容，但是我笑着跑到你的座位上，“侯淼，今天抄哪些单词？”。我每次给你讲话的时候，你都面带微笑看着我。我当时以为你和谁说话都是这么温柔呢。直到后来你告诉我，你对我一见钟情，哈哈哈哈哈哈哈。But，但是我初一真挺丑的吧。留着小平头，皮肤黑黝黝，个子没有一米五？但是不得不说你的眼光是很毒辣的，经过你的调教和自身的努力。虽说现在也长得一般吧，但还是说的过去。初一很快结束，也很美好，但是我们的缘分刚刚开始。
+      初中毕业，你和我都顺利考上了菏泽一中，让我没想到的是，当时一中可是有两个级部，每个级部20个班级，然后俩分到一个班级。当时见你的时候，你为了学习方便留了短发（说实话有点丑，以后不要留了），看到你非常的激动。
+      高中三年过得也很快，当时我可能要稍微的比你聪明一丢丢，哈哈哈哈哈，成绩很快跑到前面去了。按照当时的情形，咱俩是不可能考到一个学校去的。结果我考砸了，你考的很好，然后高考分数就差了3分。又在一个学校喽。因为高考没考好，当时其实挺伤心的，但是我每次伤心，我都会想到，我还有你陪着我。
+      当时你是报考的建筑学，顺利的录上了，但是我踏马的软件工程被调剂到食品科学与工程了。没事你建筑学不是五年吗，我降级转专业在读一年。正好又一起毕业。大学和你的美好瞬间太多太多了，不回忆了，就这样吧。反正照片都在，想看的时候就看看。
+      我能想到的最浪漫的事情，就是和你一起，把那些看起来很普通的日子慢慢走完： 一起吃很多很多顿饭，一起商量要不要去一个从来没去过的地方； 在你很开心的时候被你分享第一反应，在你很难过的时候给你一个完全可以依靠的怀抱。
+
+	哥们的文笔本来就不好，你就凑活着看吧，姐妹。
+
+      </div>
+
+      <div class="letter-sign" id="letter-sign">永远爱你的我</div>
+    </div>
+  </div>
+
+  <script>
+    // 星星背景
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 40; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.top = Math.random() * 100 + 'vh';
+      s.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
+      starsContainer.appendChild(s);
+    }
+
+    // URL 中的 name，用来个性化几句文案
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get('name');
+    const subtitle = document.getElementById('subtitle-text');
+    const letterSign = document.getElementById('letter-sign');
+    const envelopeTo = document.getElementById('envelope-to');
+    const envelope = document.getElementById('envelope');
+    const replyBtn = document.getElementById('reply-btn');
+    const replyPanel = document.getElementById('reply-panel');
+    const replyText = document.getElementById('reply-text');
+    const replyCancel = document.getElementById('reply-cancel');
+    const replySend = document.getElementById('reply-send');
+    // TODO: 将下面这个地址替换成你在 Formspree 后台生成的表单地址
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/maqyrabp';
+
+    if (name) {
+      subtitle.textContent = `和 ${name} 一起的未来，我会很认真地期待。`;
+      letterSign.textContent = `永远爱你的阿彪`;
+      if (envelopeTo) {
+        envelopeTo.textContent = `写给未来的 ${name}`;
+      }
+    }
+
+    if (envelope) {
+      envelope.addEventListener('click', () => {
+        document.body.classList.add('letter-open');
+      });
+    }
+
+    if (replyBtn && replyPanel && replyText) {
+      replyBtn.addEventListener('click', () => {
+        document.body.classList.add('reply-open');
+        replyText.focus();
+      });
+
+      if (replyCancel) {
+        replyCancel.addEventListener('click', () => {
+          document.body.classList.remove('reply-open');
+        });
+      }
+
+      replyPanel.addEventListener('click', (e) => {
+        if (e.target === replyPanel) {
+          document.body.classList.remove('reply-open');
+        }
+      });
+
+      if (replySend) {
+        replySend.addEventListener('click', () => {
+          const content = replyText.value.trim();
+          if (!content) {
+            alert('可以先写几句想说的话再发送哦~');
+            return;
+          }
+
+          if (!FORMSPREE_ENDPOINT || FORMSPREE_ENDPOINT.includes('your_form_id_here')) {
+            alert('还没有配置好回信通道，请先在 Formspree 后台填写表单地址。');
+            return;
+          }
+
+          const displayName = name || '未来的你';
+
+          replySend.disabled = true;
+          replySend.textContent = '发送中…';
+
+          fetch(FORMSPREE_ENDPOINT, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: content,
+              from: displayName,
+              page: 'future.htm',
+            }),
+          }).then((response) => {
+            if (response.ok) {
+              alert('我已经把这封回信交给邮箱啦，等一会儿阿彪就能在邮箱里看到你的话了。');
+              replyText.value = '';
+              document.body.classList.remove('reply-open');
+            } else {
+              alert('好像没有发送成功，可以稍后再试一次，或者直接发邮件到：wbzhuit@126.com。');
+            }
+          }).catch(() => {
+            alert('网络好像有点小脾气，这次没发出去，可以稍后再试一下。');
+          }).finally(() => {
+            replySend.disabled = false;
+            replySend.textContent = '发送到阿彪邮箱';
+          });
+        });
+      }
+    }
+
+    // 背景音乐开关（带全局进度同步）
+    const music = document.getElementById("background-music");
+    const musicToggle = document.getElementById("music-toggle");
+    const iconMuted = document.getElementById("icon-muted");
+    const iconPlaying = document.getElementById("icon-playing");
+    const BGM_TIME_KEY = 'globalBgmTime';
+    const BGM_PLAY_KEY = 'globalBgmPlaying';
+
+    if (music && musicToggle && iconMuted && iconPlaying) {
+      let isPlaying = true;
+
+      const storedTime = parseFloat(localStorage.getItem(BGM_TIME_KEY) || '0');
+      if (!Number.isNaN(storedTime) && storedTime > 0) {
+        music.currentTime = storedTime;
+      }
+      const storedPlaying = localStorage.getItem(BGM_PLAY_KEY);
+      isPlaying = storedPlaying === null ? true : storedPlaying === 'true';
+
+      function applyIcon() {
+        if (isPlaying) {
+          iconMuted.style.display = "none";
+          iconPlaying.style.display = "inline";
+        } else {
+          iconMuted.style.display = "inline";
+          iconPlaying.style.display = "none";
+        }
+      }
+
+      applyIcon();
+
+      if (isPlaying) {
+        music.play().catch(() => { isPlaying = false; applyIcon(); });
+      } else {
+        music.pause();
+      }
+
+      music.addEventListener('timeupdate', () => {
+        localStorage.setItem(BGM_TIME_KEY, String(music.currentTime));
+      });
+
+      musicToggle.addEventListener("click", () => {
+        if (isPlaying) {
+          music.pause();
+          isPlaying = false;
+        } else {
+          music.play().catch(() => {});
+          isPlaying = true;
+        }
+        localStorage.setItem(BGM_PLAY_KEY, String(isPlaying));
+        applyIcon();
+      });
+    }
+  </script>
+</body>
+</html>

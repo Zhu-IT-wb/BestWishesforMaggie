@@ -508,9 +508,9 @@
   <p id="love-text">Tum ho meri har khushi ki wajah... Forever & Always</p>
 
   <div class="nav-buttons">
-    <a class="nav-btn love" href="./reasons.htm">💌 Why I Love You</a>
+    <a class="nav-btn love" href="./suprise.html">🎄 弥补圣诞节的遗憾</a>
     <a class="nav-btn memories" href="./memories.htm">📸 Our Memories</a>
-    <a class="nav-btn home" href="./index.htm">🏠 Home</a>
+    <a class="nav-btn home" href="./future.htm">🌟 未来展望</a>
   </div>
 
   <div class="heart-mat"></div>
@@ -541,8 +541,8 @@
   <footer>
     <div class="footer-content">
       <div class="made-by">Crafted with ❤️ by</div>
-      <a href="https://www.linkedin.com/in/deepak-kambala-89a703361/">
-        <strong>Deepak Kambala</strong>
+      <a href="">
+        <strong>爱你的阿彪</strong>
       </a>
     </div>
   </footer>
@@ -641,18 +641,58 @@
       });
     }
 
-    // 🎵 Music toggle
+    // 🎵 Music toggle（带全局进度同步）
     const music = document.getElementById("background-music");
     const musicToggle = document.getElementById("music-toggle");
     const iconMuted = document.getElementById("icon-muted");
     const iconPlaying = document.getElementById("icon-playing");
-    let isPlaying = true;
-    iconMuted.style.display = "none"; iconPlaying.style.display = "inline";
-    musicToggle.addEventListener("click", () => {
-      if (isPlaying) { music.pause(); iconMuted.style.display = "inline"; iconPlaying.style.display = "none"; }
-      else { music.play().catch(e => console.error(e)); iconMuted.style.display = "none"; iconPlaying.style.display = "inline"; }
-      isPlaying = !isPlaying;
-    });
+    const BGM_TIME_KEY = 'globalBgmTime';
+    const BGM_PLAY_KEY = 'globalBgmPlaying';
+
+    if (music && musicToggle && iconMuted && iconPlaying) {
+      let isPlaying = true;
+
+      const storedTime = parseFloat(localStorage.getItem(BGM_TIME_KEY) || '0');
+      if (!Number.isNaN(storedTime) && storedTime > 0) {
+        music.currentTime = storedTime;
+      }
+      const storedPlaying = localStorage.getItem(BGM_PLAY_KEY);
+      isPlaying = storedPlaying === null ? true : storedPlaying === 'true';
+
+      function applyIcon() {
+        if (isPlaying) {
+          iconMuted.style.display = "none";
+          iconPlaying.style.display = "inline";
+        } else {
+          iconMuted.style.display = "inline";
+          iconPlaying.style.display = "none";
+        }
+      }
+
+      applyIcon();
+
+      if (isPlaying) {
+        music.play().catch(() => { isPlaying = false; applyIcon(); });
+      } else {
+        music.pause();
+      }
+
+      music.addEventListener('timeupdate', () => {
+        localStorage.setItem(BGM_TIME_KEY, String(music.currentTime));
+      });
+
+      musicToggle.addEventListener("click", () => {
+        if (isPlaying) {
+          music.pause();
+          isPlaying = false;
+        } else {
+          music.play().catch(() => {});
+          isPlaying = true;
+        }
+        localStorage.setItem(BGM_PLAY_KEY, String(isPlaying));
+        applyIcon();
+      });
+    }
 
     // Theme Toggler
     const themeWrapper = document.querySelector(".theme-toggle-wrapper");

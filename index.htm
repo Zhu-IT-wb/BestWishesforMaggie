@@ -227,6 +227,44 @@
       50% { opacity: 1; transform: scale(1); }
     }
 
+    /* 背景音乐开关 */
+    #music-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 0, 0, 0.3);
+      border: 2px solid rgba(255, 0, 0, 0.5);
+      color: white;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 30;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    #music-toggle:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    #music-toggle:active {
+      transform: scale(0.9);
+    }
+
+    #music-toggle svg {
+      width: 24px;
+      height: 24px;
+      fill: red;
+      stroke: red;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     @media (max-width: 768px) {
       h1 { font-size: 3rem; }
       .subtitle { font-size: 1.2rem; }
@@ -350,6 +388,22 @@
 </head>
 
 <body>
+  <audio id="background-music" src="music/music.mp3" autoplay loop></audio>
+  <button id="music-toggle" title="Toggle Music">
+    <span id="icon-playing" style="display: none;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+      </svg>
+    </span>
+    <span id="icon-muted">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+    </span>
+  </button>
 
   <canvas id="fireworksCanvas"></canvas>
 
@@ -660,6 +714,60 @@
     }
 
     loop();
+
+    // 背景音乐开关（带全局进度同步）
+    const music = document.getElementById("background-music");
+    const musicToggle = document.getElementById("music-toggle");
+    const iconMuted = document.getElementById("icon-muted");
+    const iconPlaying = document.getElementById("icon-playing");
+    const BGM_TIME_KEY = 'globalBgmTime';
+    const BGM_PLAY_KEY = 'globalBgmPlaying';
+
+    if (music && musicToggle && iconMuted && iconPlaying) {
+      let isPlaying = true;
+
+      // 从 localStorage 恢复播放进度和播放状态
+      const storedTime = parseFloat(localStorage.getItem(BGM_TIME_KEY) || '0');
+      if (!Number.isNaN(storedTime) && storedTime > 0) {
+        music.currentTime = storedTime;
+      }
+      const storedPlaying = localStorage.getItem(BGM_PLAY_KEY);
+      isPlaying = storedPlaying === null ? true : storedPlaying === 'true';
+
+      function applyIcon() {
+        if (isPlaying) {
+          iconMuted.style.display = "none";
+          iconPlaying.style.display = "inline";
+        } else {
+          iconMuted.style.display = "inline";
+          iconPlaying.style.display = "none";
+        }
+      }
+
+      applyIcon();
+
+      if (isPlaying) {
+        music.play().catch(() => { isPlaying = false; applyIcon(); });
+      } else {
+        music.pause();
+      }
+
+      music.addEventListener('timeupdate', () => {
+        localStorage.setItem(BGM_TIME_KEY, String(music.currentTime));
+      });
+
+      musicToggle.addEventListener("click", () => {
+        if (isPlaying) {
+          music.pause();
+          isPlaying = false;
+        } else {
+          music.play().catch(() => {});
+          isPlaying = true;
+        }
+        localStorage.setItem(BGM_PLAY_KEY, String(isPlaying));
+        applyIcon();
+      });
+    }
   </script>
 
 </body>

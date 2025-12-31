@@ -448,6 +448,44 @@
       }
     }
 
+    /* 背景音乐开关 */
+    #music-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 0, 0, 0.3);
+      border: 2px solid rgba(255, 0, 0, 0.5);
+      color: white;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    #music-toggle:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    #music-toggle:active {
+      transform: scale(0.9);
+    }
+
+    #music-toggle svg {
+      width: 24px;
+      height: 24px;
+      fill: red;
+      stroke: red;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     @media (max-width: 768px) {
       h1 {
         font-size: 3rem;
@@ -481,6 +519,22 @@
 </head>
 
 <body>
+  <audio id="background-music" src="music/music.mp3" autoplay loop></audio>
+  <button id="music-toggle" title="Toggle Music">
+    <span id="icon-playing" style="display: none;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+      </svg>
+    </span>
+    <span id="icon-muted">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+    </span>
+  </button>
 
   <a href="page2.htm" class="back-button">← Back</a>
 
@@ -497,8 +551,8 @@
         <div class="memory-icon">💫</div>
         <div class="memory-content memory-trigger" data-memory-id="1">
           <h3 class="memory-title">2025年1月20日 · 一起去滑雪</h3>
-          <p class="memory-date">怀北雪场 · 咱俩的小白初体验</p>
-          <p class="memory-text">点开看看</p>
+          <p class="memory-date">新手村练级 · 滑雪篇</p>
+          <p class="memory-text">怀北 · 屁股好痛但好开心</p>
         </div>
       </div>
 
@@ -506,8 +560,8 @@
         <div class="memory-icon">💝</div>
         <div class="memory-content memory-trigger" data-memory-id="2">
           <h3 class="memory-title">2025年3月23日 · 自驾去宝泉</h3>
-          <p class="memory-date">宝泉 · 我再也不去了，呜呜呜</p>
-          <p class="memory-text">点开看看</p>
+          <p class="memory-date">宝泉“历险记”</p>
+          <p class="memory-text">某人说这辈子再也不来了😂</p>
         </div>
       </div>
 
@@ -515,8 +569,8 @@
         <div class="memory-icon">🌟</div>
         <div class="memory-content memory-trigger" data-memory-id="3">
           <h3 class="memory-title">2025年4月5日 · 踏青</h3>
-          <p class="memory-date">北京 · 俺们又来了</p>
-          <p class="memory-text">点开看看</p>
+          <p class="memory-date">北京春日限定</p>
+          <p class="memory-text">终于打卡了颐和园！</p>
         </div>
       </div>
 
@@ -524,17 +578,17 @@
         <div class="memory-icon">🎭</div>
         <div class="memory-content memory-trigger" data-memory-id="4">
           <h3 class="memory-title">2025年5月1日 · 五一五一</h3>
-          <p class="memory-date">回家回家</p>
-          <p class="memory-text">点开看看</p>
+          <p class="memory-date">五一摆烂计划</p>
+          <p class="memory-text">在麦田撒欢 & 尴尬的偷拍</p>
         </div>
       </div>
 
       <div class="memory">
         <div class="memory-icon">🌈</div>
         <div class="memory-content memory-trigger" data-memory-id="5">
-          <h3 class="memory-title">2025年 · 一起在家的一天</h3>
-          <p class="memory-date">做饭、刷碗、抢沙发和被子</p>
-          <p class="memory-text">看起来最普通的一天，也值得被专门记在某一格里。</p>
+          <h3 class="memory-title">2025年6月 · 和你在一起</h3>
+          <p class="memory-date">回家回家看看</p>
+          <p class="memory-text">陪你拍工照，陪你搞怪</p>
         </div>
       </div>
 
@@ -542,17 +596,17 @@
         <div class="memory-icon">💖</div>
         <div class="memory-content memory-trigger" data-memory-id="6">
           <h3 class="memory-title">2025年10月1日 · 十一国庆假期</h3>
-          <p class="memory-date">苏杭 · 报复性见面</p>
-          <p class="memory-text">点开看看</p>
+          <p class="memory-date">结束异地！狂玩模式！</p>
+          <p class="memory-text">苏杭 · 憋了4个月的大招</p>
         </div>
       </div>
 
       <div class="memory">
         <div class="memory-icon">✨</div>
         <div class="memory-content memory-trigger" data-memory-id="7">
-          <h3 class="memory-title">2025年 · To be continued...</h3>
-          <p class="memory-date">把还没写下来的，都留给未来的我们</p>
-          <p class="memory-text">这一格先空着，等我们再创造一个值得被好好记录的瞬间，就把故事写在这里。</p>
+          <h3 class="memory-title">2025年11月16日 · 思念不可待</h3>
+          <p class="memory-date">反客为主去见你</p>
+          <p class="memory-text">北京初雪 · 运气也是实力</p>
         </div>
       </div>
     </div>
@@ -612,7 +666,7 @@
     const memoryDetails = {
       1: {
         title: '2025年1月20日 · 一起去滑雪',
-        text: '研一放寒假，咱们俩一起去怀北滑雪，结果不巧那天停电，但我们谁都不想就这么回家，一直在雪场里等，终于等到重新来电。因为我们俩都是小白，我又特别担心你的安全，就给你安排了一个教练，想让你玩得开心又安心。那天虽然冷得要命，但和你在一起的一切都变得很温暖。',
+        text: '研一放寒假，咱们俩一起去怀北滑雪，结果不巧那天停电，但我们谁都不想就这么回家，一直在雪场里等，终于等到重新来电。因为我们俩都是小白，我又特别担心你的安全，就给你安排了一个教练，想让你玩得开心又安心。但是你还是受伤了，赶紧拉着你去医院！！那天虽然冷得要命，但和你在一起的一切都变得很温暖。',
         images: [
           'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/01skiing/1.jpg',
           'https://love-images-2025-1314505463.cos.ap-beijing.myqcloud.com/01skiing/2.jpg',
@@ -745,6 +799,59 @@
         closeMemoryModal();
       }
     });
+
+    // 背景音乐开关（带全局进度同步）
+    const music = document.getElementById("background-music");
+    const musicToggle = document.getElementById("music-toggle");
+    const iconMuted = document.getElementById("icon-muted");
+    const iconPlaying = document.getElementById("icon-playing");
+    const BGM_TIME_KEY = 'globalBgmTime';
+    const BGM_PLAY_KEY = 'globalBgmPlaying';
+
+    if (music && musicToggle && iconMuted && iconPlaying) {
+      let isPlaying = true;
+
+      const storedTime = parseFloat(localStorage.getItem(BGM_TIME_KEY) || '0');
+      if (!Number.isNaN(storedTime) && storedTime > 0) {
+        music.currentTime = storedTime;
+      }
+      const storedPlaying = localStorage.getItem(BGM_PLAY_KEY);
+      isPlaying = storedPlaying === null ? true : storedPlaying === 'true';
+
+      function applyIcon() {
+        if (isPlaying) {
+          iconMuted.style.display = "none";
+          iconPlaying.style.display = "inline";
+        } else {
+          iconMuted.style.display = "inline";
+          iconPlaying.style.display = "none";
+        }
+      }
+
+      applyIcon();
+
+      if (isPlaying) {
+        music.play().catch(() => { isPlaying = false; applyIcon(); });
+      } else {
+        music.pause();
+      }
+
+      music.addEventListener('timeupdate', () => {
+        localStorage.setItem(BGM_TIME_KEY, String(music.currentTime));
+      });
+
+      musicToggle.addEventListener("click", () => {
+        if (isPlaying) {
+          music.pause();
+          isPlaying = false;
+        } else {
+          music.play().catch(() => {});
+          isPlaying = true;
+        }
+        localStorage.setItem(BGM_PLAY_KEY, String(isPlaying));
+        applyIcon();
+      });
+    }
   </script>
 
 </body>

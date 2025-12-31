@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merry Christmas My Love</title>
+    <style>
+        /* --- 基础设置 --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .scene-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .background-img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        #fireworksCanvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* --- 圣诞树 (调整大小) --- */
+        .tree-wrapper {
+            position: absolute;
+            bottom: 5%;
+            left: 2%;        /* 稍微靠左一点，给人物腾地方 */
+            width: 888px;    /* 圣诞树再放大一圈 */
+            height: auto;
+            z-index: 10;
+        }
+
+        .tree-img {
+            width: 100%;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(0,0,0,0.6)); 
+        }
+
+        /* 灯光样式保持不变 */
+        .light {
+            position: absolute; width: 12px; height: 12px; border-radius: 50%;
+            background-color: #fff; box-shadow: 0 0 15px currentColor;
+            opacity: 0; animation: flash 1.5s infinite alternate;
+        }
+        .l-red { background-color: #ff3333; color: #ff3333; }
+        .l-gold { background-color: #ffcc00; color: #ffcc00; }
+        .l-blue { background-color: #3399ff; color: #3399ff; }
+        @keyframes flash {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 25px currentColor; }
+        }
+
+        /* --- 人物 (调整位置和方向) --- */
+        /* 女孩 */
+        .girl-img {
+            position: absolute;
+            bottom: 5%;
+            left: 35%;       /* 稍微调整位置 */
+            height: 45vh;
+            width: auto;
+            z-index: 11;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
+        }
+
+        /* 男孩 */
+        .boy-img {
+            position: absolute;
+            bottom: 3%;
+            /* 【修改点2】让男孩离女孩近一点 */
+            left: 50%;       /* 用 left 定位，放在女孩右边 */
+            height: auto;
+            width: 48vh;
+            z-index: 12;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
+            /* 【修改点2】男孩翻过来了 (去掉了 transform: scaleX(-1)) */
+            /* 如果你的素材本身是反的，加上 transform: scaleX(-1); */
+        }
+
+        /* 手机适配微调 */
+        @media (max-width: 768px) {
+            .tree-wrapper { width: 320px; left: -20px; }
+            .girl-img { left: 30%; height: 35vh; }
+            .boy-img { left: 55%; height: 38vh; }
+        }
+
+        /* 右侧文字 */
+        .right-message {
+            position: absolute;
+            right: 6%;
+            bottom: 20%;
+            max-width: 260px;
+            color: #ffeef7;
+            font-family: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 20px;
+            line-height: 1.6;
+            text-align: center;
+            z-index: 15;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.9), 0 0 20px rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .right-message {
+                right: 4%;
+                bottom: 26%;
+                max-width: 200px;
+                font-size: 16px;
+            }
+        }
+
+        /* 背景音乐开关 */
+        #music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 0, 0, 0.3);
+            border: 2px solid rgba(255, 0, 0, 0.5);
+            color: white;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        #music-toggle:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        #music-toggle:active {
+            transform: scale(0.9);
+        }
+
+        #music-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: red;
+            stroke: red;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+    </style>
+</head>
+<body>
+
+        <audio id="background-music" src="music/music.mp3" autoplay loop></audio>
+        <button id="music-toggle" title="Toggle Music">
+            <span id="icon-playing" style="display: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+            </span>
+            <span id="icon-muted">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                </svg>
+            </span>
+        </button>
+
+        <div class="scene-container">
+        <img src="data/bg.jpg" alt="Background" class="background-img">
+        <canvas id="fireworksCanvas"></canvas>
+
+        <div class="tree-wrapper">
+            <img src="data/tree.png" alt="Tree" class="tree-img">
+            <div class="light l-gold" style="top: 22%; left: 48%; animation-delay: 0s;"></div>
+            <div class="light l-red"  style="top: 38%; left: 32%; animation-delay: 0.5s;"></div>
+            <div class="light l-blue" style="top: 42%; left: 65%; animation-delay: 1s;"></div>
+            <div class="light l-gold" style="top: 58%; left: 42%; animation-delay: 0.2s;"></div>
+            <div class="light l-red"  style="top: 68%; left: 75%; animation-delay: 0.7s;"></div>
+            <div class="light l-blue" style="top: 78%; left: 28%; animation-delay: 0.3s;"></div>
+            <div class="light l-gold" style="top: 82%; left: 58%; animation-delay: 0.8s;"></div>
+            <div class="light l-red"  style="top: 18%; left: 52%; animation-delay: 1.2s;"></div>
+        </div>
+
+        <img src="data/girl.png" alt="Girl" class="girl-img">
+        <img src="data/boy.png" alt="Boy" class="boy-img">
+
+        <div class="right-message">
+            圣诞节那天，你让我用代码给你生成一个圣诞树，但是那天我傻逼了，喝多了，起不来床。所以在元旦给你小小弥补一下。在未来的每个圣诞节，<br>都给美美的你拍美美的照片。
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let particles = [];
+        // 更丰富、明亮的颜色
+        const colors = ['#ff0040', '#ffbd00', '#00e5ff', '#cc00ff', '#ffffff', '#ff6600', '#00ff40'];
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                // 【修改】爆炸速度更快，范围更大
+                const speed = Math.random() * 7 + 3; 
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.alpha = 1;
+                // 【修改】增加重力感
+                this.gravity = 0.15; 
+                // 【修改】衰减变慢，存在时间更长
+                this.decay = Math.random() * 0.01 + 0.008; 
+                // 【修改】粒子大小随机
+                this.size = Math.random() * 2.5 + 1;
+            }
+
+            update() {
+                this.vx *= 0.95; // 空气阻力
+                this.vy *= 0.95;
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                // 添加发光效果
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function createFirework() {
+            // 主要在右侧中上区域爆炸
+            const x = Math.random() * (width * 0.5) + (width * 0.45); 
+            const y = Math.random() * (height * 0.4) + (height * 0.1);
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // 【修改】粒子数量翻倍，更密集
+            for (let i = 0; i < 200; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function animate() {
+            // 清空画布，保持背景图片可见
+            ctx.clearRect(0, 0, width, height);
+
+            // 随机生成烟花
+            if (Math.random() < 0.025) {
+                createFirework();
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // 背景音乐开关（带全局进度同步）
+        const music = document.getElementById("background-music");
+        const musicToggle = document.getElementById("music-toggle");
+        const iconMuted = document.getElementById("icon-muted");
+        const iconPlaying = document.getElementById("icon-playing");
+        const BGM_TIME_KEY = 'globalBgmTime';
+        const BGM_PLAY_KEY = 'globalBgmPlaying';
+
+        if (music && musicToggle && iconMuted && iconPlaying) {
+            let isPlaying = true;
+
+            const storedTime = parseFloat(localStorage.getItem(BGM_TIME_KEY) || '0');
+            if (!Number.isNaN(storedTime) && storedTime > 0) {
+                music.currentTime = storedTime;
+            }
+            const storedPlaying = localStorage.getItem(BGM_PLAY_KEY);
+            isPlaying = storedPlaying === null ? true : storedPlaying === 'true';
+
+            function applyIcon() {
+                if (isPlaying) {
+                    iconMuted.style.display = "none";
+                    iconPlaying.style.display = "inline";
+                } else {
+                    iconMuted.style.display = "inline";
+                    iconPlaying.style.display = "none";
+                }
+            }
+
+            applyIcon();
+
+            if (isPlaying) {
+                music.play().catch(() => { isPlaying = false; applyIcon(); });
+            } else {
+                music.pause();
+            }
+
+            music.addEventListener('timeupdate', () => {
+                localStorage.setItem(BGM_TIME_KEY, String(music.currentTime));
+            });
+
+            musicToggle.addEventListener("click", () => {
+                if (isPlaying) {
+                    music.pause();
+                    isPlaying = false;
+                } else {
+                    music.play().catch(() => {});
+                    isPlaying = true;
+                }
+                localStorage.setItem(BGM_PLAY_KEY, String(isPlaying));
+                applyIcon();
+            });
+        }
+    </script>
+</body>
+</html>
